@@ -53,12 +53,15 @@ for in1 in $(find $inputf -name "*R1_001.fastq.gz"); do
     out1=$outputtrimreads$f1
     out2=$outputtrimreads$f2
 
+    sampleid=$outputtrimreads$(basename ${in1%%R1_001.fastq.gz}"")
+
+
     echo "writing output to"
     echo $out1
     echo $out2
 
     # run bbduk and save ALL the output files    
-    $bbduk in1=$in1 in2=$in2 out1=$out1 out2=$out2 minlen=$minlen k=25 mink=8 ktrim=r ref=$adaptors hdist=1 overwrite=f qtrim=rl trimq=$trimq t=$threads bhist=$outputtrimreads"bhist.txt" qhist=$outputtrimreads"qhist.txt" gchist=$outputtrimreads"gchist.txt" aqhist=$outputtrimreads"aqhist.txt" lhist=$outputtrimreads"lhist.txt"
+    $bbduk in1=$in1 in2=$in2 out1=$out1 out2=$out2 minlen=$minlen k=25 mink=8 ktrim=r ref=$adaptors hdist=1 overwrite=f qtrim=rl trimq=$trimq t=$threads bhist=$sampleid"bhist.txt" qhist=$sampleid"qhist.txt" gchist=$sampleid"gchist.txt" aqhist=$sampleid"aqhist.txt" lhist=$sampleid"lhist.txt" > $sampleid
 
 
 
