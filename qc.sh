@@ -96,7 +96,7 @@ for in1 in $(find $outputtrimreads -name "*R1_001_trimmed.fastq.gz"); do
     echo "running bbmap"
     echo $bbmapout
     echo $path
-    $bbmap in1=$in1 in2=$in2 ref=$ref covstats=$stats covhist=$covhist out=$outsambbmap ihist=$ihist path=$path
+    $bbmap in1=$in1 in2=$in2 ref=$ref covstats=$stats covhist=$covhist out=$outsambbmap ihist=$ihist path=$path t=$threads
 
     echo "converting sams to bams"
     outbambbmap=$bbmapout$id"trimmed"
