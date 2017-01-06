@@ -9,6 +9,7 @@ outputbase="/disks/dacelo/data/QC/Project_SN7001117R_0083_CKulheim_LBronham_Mela
 ref="/disks/dacelo/data/raw_data/indices/Emel.fa.gz" # reference file as a fasta
 bbduk="/disks/dacelo/data/programs/bbmap/bbduk.sh"
 bbmap="/disks/dacelo/data/programs/bbmap/bbmap.sh"
+goleft="/disks/dacelo/data/programs/goleft/goleft_linux64"
 qualimap="/disks/dacelo/data/programs/qualimap_v2.2.1/qualimap"
 adaptors="/disks/dacelo/data/programs/bbmap/resources/adapters.fa"
 
@@ -19,16 +20,27 @@ threads=50 # number of threads to use
 minlen=50 # minimum length of read to keep after trimming
 trimq=20 # trim bases with quality < this 
 
+# chromosomes on which to run indexcov
+# the default is the first 11 (which are the good nuclear chromosomes of E. grandis)
+# and the last one (which by our own convention is the choloroplast genome)
+nuc_chroms=$(zcat $ref | grep -m11 '>' | cut -c 2- )
+chl_chrom=$(zcat $ref | tac | grep -m1 '>' | cut -c 2- )
+chroms = $nuc_chroms' '$chl_chrom
+
+
+echo "indexcov will run on the following chromosomes (not now, later...)"
+echo $chroms
 
 outputrawqc=$outputbase"rawqc/"
 outputtrimqc=$outputbase"trimmedqc/"
 outputtrimreads=$outputbase"trimmed_reads/"
-
+indexcov=$outputbase"indexcov/"
 
 echo $outputbase
 echo $outputrawqc
 echo $outputtrimqc
 echo $outputtrimreads
+echo $indexcov
 
 # set up dirs
 mkdir $outputbase
@@ -100,8 +112,9 @@ for in1 in $(find $outputtrimreads -name "*R1_001_trimmed.fastq.gz"); do
     outbambbmap=$bbmapout$id"trimmed"
     samtools view -bS -@ $threads $outsambbmap > $outbambbmap".bam"
 
-    echo "sorting bams"
+    echo "sorting and indexing bams"
     samtools sort -@ $threads  $outbambbmap".bam" $outbambbmap
+    samtools index $outbambbmap".bam"
 
     echo "deleting sams and trimmed reads"
     rm $outsambbmap
@@ -113,6 +126,21 @@ for in1 in $(find $outputtrimreads -name "*R1_001_trimmed.fastq.gz"); do
     $qualimap bamqc -bam $outbambbmap".bam" -outdir $outbamdirbbmap -nt $threads
     
 done
+
+echo "running indexcov on sorted bams"
+echo "indexcov will run on the following chromosomes"
+echo $chroms
+
+# TODO - figure out how to run indexcov on the set of BAMs
+#bams=$(echo $bbmapout*.bam)
+
+#for chr in $nuc_chroms; do
+#    echo $chr
+#    $goleft indexcov -p $chr -c $chr $bams
+#done
+
+
+
 
 echo "running multiqc"
 multiqc $outputbase -o $outputbase
