@@ -131,7 +131,7 @@ echo "indexing bam files using GNU parallel"
 ls ${bbmapout}*.bam | parallel "samtools index {}"
 
 echo "running indexcov on sorted bams"
-$goleft indexcov --directory $indexcov --sex Chr01,Chr02 ${bbmapout}"*.bam"
+$goleft indexcov --directory $indexcov --sex "" ${bbmapout}"*.bam"
 
 echo "running multiqc"
 multiqc $outputbase -o $outputbase

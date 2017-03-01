@@ -77,6 +77,3 @@ Performs the basic QC on the reads, in the following steps:
 2. Examine the stats from bbduk in ```/trimmed_reads```. This will tell you useful information about adaptors and quality trimming.
 3. Examine the fastqc.html files in ```/rawqc``` and ```/trimmedqc```
 4. Look at the indexcov HTML report for any issues, particularly for differences between samples that might indicate problems with extraction / sequencing. 
-
-
-Note that the indexcov output contains stuff about sex chromosomes. For our work, this is garbage - but it's just a requirement that you pretend to indexcov that you have sex chromosomes in your genome.
