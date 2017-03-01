@@ -19,14 +19,18 @@ Because we do a lot of that kind of sequencing, and it's a pain figuring this st
 	* multiqc: http://multiqc.info/
 	* qualimap: http://qualimap.bioinfo.cipf.es/
 	* samtools: https://github.com/lh3/samtools
+	* goleft: https://github.com/brentp/goleft
+	* GNU parallel: https://www.gnu.org/software/parallel/
+
+Make sure that GNU parallel is in your path such that typing ```parallel``` calls it. If you want to know which version you call, just type ```parallel --version```. If you're not getting the GNU version (some linux distros have other defaults) edit your ```~/.basrc``` appropriately. 
 
 ## Overview
 
 For the gory details, just look at the scripts. I'll provide a short overview here though. 
 
-A disclaimer is that this code is neither particularly optimal nor particularly beautiful. But it's optimal enough and beautiful enough for us. But I'm sharing it because I've benefitted so much from others sharing their own code that I hope this can be of some help (maybe only to my own students, but it's a start).
+A disclaimer is that this code is neither particularly optimal nor particularly beautiful. But it's optimal enough and beautiful enough for us. I'm sharing it because I've benefitted so much from others sharing their own code that I hope this can be of some help (maybe only to my own students, but it's a start).
 
-Also note that there are no commandline arguments. That's by design. Without commandline arguments, the script itself is a perfect record of what we did. So by dropping this script into the output folder, we can know exactly what to do to re-run the same thing again.
+Also note that there are no commandline arguments. That's by design. Without commandline arguments, the script itself is a perfect record of what we did. This helps becuase when I get new data, I drop a copy of this script into the folder with the fastq files, then run that version of the script. Then, in a year when I can't remember exactly what I did for the QC, it's all there in the script. 
 
 ### qc.sh
 
@@ -39,6 +43,8 @@ Performs the basic QC on the reads, in the following steps:
 3. Uses *bbmap* to map the trimmed reads to the E. grandis genome
 4. Uses *samtools* to turn the SAM files to sorted BAM files
 5. Deletes all the large files (the SAMs and the trimmed read files)*
+6. Uses *samtools* and GNU parallel to index all the bams
+7. Uses *indexcov* to visualise various coverage stats across all samples
 6. Uses *multiQC* to summarise most of the QC data
 
 *It would be easy not to delete these files of course, but since the only point of this script is to run QC, we usually don't want to keep the trimmed reads. We can always re-trim the files for the final analysis if we like the settings we used.
@@ -62,6 +68,7 @@ Performs the basic QC on the reads, in the following steps:
 * ```/trimmedqc``` fastqc results on the trimmed sequencing reads
 * ```/trimmed_reads``` trimming stats from bbduk (lots of text files)
 * ```/multiqc_data``` data for the multiQC report
+* ```/indexcov``` information from indexcov
 * ```multiqc_report.html``` the multiQC report itself
 
 #### What to look at
@@ -69,3 +76,7 @@ Performs the basic QC on the reads, in the following steps:
 1. Use the multiQC report for a very useful (but necessarily rather limited) overall summary of the data. This is the first thing we look at to detect issues. 
 2. Examine the stats from bbduk in ```/trimmed_reads```. This will tell you useful information about adaptors and quality trimming.
 3. Examine the fastqc.html files in ```/rawqc``` and ```/trimmedqc```
+4. Look at the indexcov HTML report for any issues, particularly for differences between samples that might indicate problems with extraction / sequencing. 
+
+
+Note that the indexcov output contains stuff about sex chromosomes. For our work, this is garbage - but it's just a requirement that you pretend to indexcov that you have sex chromosomes in your genome.

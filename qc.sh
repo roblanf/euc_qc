@@ -127,20 +127,11 @@ for in1 in $(find $outputtrimreads -name "*R1_001_trimmed.fastq.gz"); do
     
 done
 
+echo "indexing bam files using GNU parallel"
+ls ${bbmapout}*.bam | parallel "samtools index {}"
+
 echo "running indexcov on sorted bams"
-echo "indexcov will run on the following chromosomes"
-echo $chroms
-
-# TODO - figure out how to run indexcov on the set of BAMs
-#bams=$(echo $bbmapout*.bam)
-
-#for chr in $nuc_chroms; do
-#    echo $chr
-#    $goleft indexcov -p $chr -c $chr $bams
-#done
-
-
-
+$goleft indexcov --directory $indexcov --sex Chr01,Chr02 ${bbmapout}"*.bam"
 
 echo "running multiqc"
 multiqc $outputbase -o $outputbase
