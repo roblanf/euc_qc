@@ -25,13 +25,11 @@ threads=20 # number of threads to use
 # set up dirs
 outBWAMEM=$outputbase"BWAMEM/"
 outbbmap=$outputbase"bbmap/"
-outbowtie2=$outputbase"bowtie2/"
 outngm=$outputbase"ngm/"
 outstampy=$outputbase"stampy/"
 mkdir $outputbase
 mkdir $outBWAMEM
 mkdir $outbbmap
-mkdir $outbowtie2
 mkdir $outngm
 mkdir $outstampy
 
