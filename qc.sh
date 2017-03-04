@@ -20,16 +20,7 @@ threads=50 # number of threads to use
 minlen=50 # minimum length of read to keep after trimming
 trimq=20 # trim bases with quality < this 
 
-# chromosomes on which to run indexcov
-# the default is the first 11 (which are the good nuclear chromosomes of E. grandis)
-# and the last one (which by our own convention is the choloroplast genome)
-nuc_chroms=$(zcat $ref | grep -m11 '>' | cut -c 2- )
-chl_chrom=$(zcat $ref | tac | grep -m1 '>' | cut -c 2- )
-chroms = $nuc_chroms' '$chl_chrom
 
-
-echo "indexcov will run on the following chromosomes (not now, later...)"
-echo $chroms
 
 outputrawqc=$outputbase"rawqc/"
 outputtrimqc=$outputbase"trimmedqc/"
@@ -53,6 +44,9 @@ mkdir $outputtrimreads
 # sample pairs look like:
 # RL41_S1_R1_001.fastq.gz
 # RL41_S1_R2_001.fastq.gz
+echo "Trimming with bbduk"
+date
+
 for in1 in $(find $inputf -name "*R1_001.fastq.gz"); do
     in2=${in1%%R1_001.fastq.gz}"R2_001.fastq.gz"
     echo "running bbduk on"
@@ -77,13 +71,23 @@ for in1 in $(find $inputf -name "*R1_001.fastq.gz"); do
 
 done
 
+echo "Done trimming"
+date
+
 # run fastqc on all the raw and trimmed data files
+echo "Running fastqc"
+date
 find $inputf -name '*.fastq.gz' | xargs fastqc  -o $outputrawqc -t $threads
 find $outputtrimreads -name '*.fastq.gz' | xargs fastqc  -o $outputtrimqc -t $threads
 
+echo "Done running fastqc"
+date
 
 # map reads to E. grandis reference
 # our trimmed files look like: RL41_S1_R1_001_trimmed.fastq.gz  RL41_S1_R2_001_trimmed.fastq.gz
+echo "Mapping"
+date
+
 for in1 in $(find $outputtrimreads -name "*R1_001_trimmed.fastq.gz"); do
     in2=${in1%%R1_001_trimmed.fastq.gz}"R2_001_trimmed.fastq.gz"
     echo ""
@@ -127,11 +131,24 @@ for in1 in $(find $outputtrimreads -name "*R1_001_trimmed.fastq.gz"); do
     
 done
 
-echo "indexing bam files using GNU parallel"
-ls ${bbmapout}*.bam | parallel "samtools index {}"
+echo "Done Mapping"
+date
 
-echo "running indexcov on sorted bams"
+
+echo "indexing bams"
+date
+ls ${bbmapout}*.bam | parallel "samtools index {}"
+echo "done indexing bams"
+date
+
+echo "running indexcov"
+date
 $goleft indexcov --directory $indexcov --sex "" ${bbmapout}"*.bam"
 
+echo "done running indexcov"
+date
+
 echo "running multiqc"
+date
 multiqc $outputbase -o $outputbase
+date
