@@ -27,7 +27,9 @@ Here, you can obviously substitute the reference genome for whatever the closest
 	* goleft: https://github.com/brentp/goleft
 	* GNU parallel: https://www.gnu.org/software/parallel/
 
-3. Get a gff file (you could use a bed file too) of the region of the genome you are most interested in. For our analyses, we know that the Eucalyptus genomes have lots of repeats (~40%) and we know that we have no hope of using these regions for inference. So, as well as looking at how reads map to the whole genome, we also look at the subset of the genome that corresponds just to genes, here. This file comes with the E. grandis reference in the ```/annotation``` folder, and is called ```Egrandis_297_v2.0.gene.gff3.gz```
+3. Get a gff file (you could use a bed file too) of the region of the genome you are most interested in. For our analyses, we know that the Eucalyptus genomes have lots of repeats (~40%) and we know that we have no hope of using these regions for inference. So, as well as looking at how reads map to the whole genome, we also look at the subset of the genome that corresponds just to genes, here. This file comes with the E. grandis reference in the ```/annotation``` folder, and is called ```Egrandis_297_v2.0.gene.gff3.gz```. For my purposes, I am only interested in the first 11 scaffolds, which in the E. grandis genome correspond to 11 pretty well figured-out chromosomes. The other ~50k scaffolds are little pieces that were hard to assemble. I don't make inferences from those. Here's a clunky one-liner to get just the genes on the first 11 chromosomes (after unzipping the gff3.gz file):
+
+```awk '$1=="Chr01" || $1=="Chr02" || $1=="Chr03" || $1=="Chr04" || $1=="Chr05" || $1=="Chr06" || $1=="Chr07" || $1=="Chr08" || $1=="Chr09" || $1=="Chr10" || $1=="Chr11"' genes.gff3 > genes_chr1_to_chr11.gff3```
 
 4. Make sure that the appropriate programs are in your path by editing your ```./bashrc```. We had some issues with with GNU parallel at the start. A useful tip here is to just type ```parallel --version```. If you're not getting the GNU version (some linux distros have other defaults) edit your ```~/.basrc``` appropriately. 
 
