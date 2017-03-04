@@ -53,6 +53,14 @@ Compares a few common pieces of mapping software, by mapping a single sample of 
 * **ref**: The reference genome. A quirk of my laziness is that I want you to put a copy of this in $outputbase yourself, and I'll work with it from there.
 * **gff**: the gff (or bed) file that specifies a subset of the genome you're interested in
 
+### Running it
+
+I just run it like this:
+
+```sh compare.sh &> log.txt```
+
+You can extract the time each analysis took from the frequent date stamps. I just do this by hand - it's only 4 mappers. 
+
 ### Output
 
 A folder for each aligner (e.g. ```/ngm```), which contains:
