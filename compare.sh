@@ -70,8 +70,8 @@ time samtools sort -@ $threads  out.bam out
 time samtools index out.bam
 date
 echo "running qualimap"
-time qualimap bamqc -bam out.bam -outdir $outngm"qualimap_all/" -nt $threads -c
-time qualimap bamqc -bam out.bam -outdir $outngm"qualimap_gff/" -gff ../genes_chr1_to_chr11.gff3 -nt $threads -c
+time qualimap bamqc -bam out.bam -outdir $outbbmap"qualimap_all/" -nt $threads -c
+time qualimap bamqc -bam out.bam -outdir $outbbmap"qualimap_gff/" -gff ../genes_chr1_to_chr11.gff3 -nt $threads -c
 date
 echo "Done mapping with bbmap"
 
@@ -94,8 +94,8 @@ time samtools sort -@ $threads  out.bam out
 time samtools index out.bam
 date
 echo "running qualimap"
-time qualimap bamqc -bam out.bam -outdir $outngm"qualimap_all/" -nt $threads -c
-time qualimap bamqc -bam out.bam -outdir $outngm"qualimap_gff/" -gff ../genes_chr1_to_chr11.gff3 -nt $threads -c
+time qualimap bamqc -bam out.bam -outdir $outBWAMEM"qualimap_all/" -nt $threads -c
+time qualimap bamqc -bam out.bam -outdir $outBWAMEM"qualimap_gff/" -gff ../genes_chr1_to_chr11.gff3 -nt $threads -c
 date
 echo "Done mapping with BWA MEM"
 
@@ -119,7 +119,7 @@ time samtools sort -@ $threads  out.bam out
 time samtools index out.bam
 date
 echo "running qualimap"
-time qualimap bamqc -bam out.bam -outdir $outngm"qualimap_all/" -nt $threads -c
-time qualimap bamqc -bam out.bam -outdir $outngm"qualimap_gff/" -gff ../genes_chr1_to_chr11.gff3 -nt $threads -c
+time qualimap bamqc -bam out.bam -outdir $outstampy"qualimap_all/" -nt $threads -c
+time qualimap bamqc -bam out.bam -outdir $outstampy"qualimap_gff/" -gff ../genes_chr1_to_chr11.gff3 -nt $threads -c
 date
 echo "Done mapping with stampy"
