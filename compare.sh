@@ -18,7 +18,7 @@ ref="Emel.fa.gz" # reference file as a fasta
 
 # gff file defining subset of reference genome - qualimap will run on both the whole genome and on this subset
 # sensible to define a subset that you might use for your final analyses
-gff="/disks/dacelo/data/compare_mappers/genes_chr1_to_chr11.gff3"
+gff=$outputbase"Egrandis_genes_chr1_to_chr11.gff3"
 
 threads=20 # number of threads to use
 
@@ -37,10 +37,10 @@ mkdir $outstampy
 cd $outngm
 cp ../$ref $ref
 date
-echo "inexing and mapping with ngm"
+echo "indexing and mapping with ngm"
 time ngm -t $threads -p -r $ref -1 $R1 -2 $R2 -o out.sam 
 date
-echo "inexing and mapping with ngm done"
+echo "indexing and mapping with ngm done"
 echo "converting sams to bams"
 time samtools view -bS -@ $threads out.sam > out.bam
 date
@@ -50,7 +50,7 @@ time samtools index out.bam
 date
 echo "running qualimap"
 time qualimap bamqc -bam out.bam -outdir $outngm"qualimap_all/" -nt $threads -c
-time qualimap bamqc -bam out.bam -outdir $outngm"qualimap_gff/" -gff ../genes_chr1_to_chr11.gff3 -nt $threads -c
+time qualimap bamqc -bam out.bam -outdir $outngm"qualimap_gff/" -gff $gff -nt $threads -c
 date
 echo "Done mapping with ngm"
 
@@ -71,21 +71,21 @@ time samtools index out.bam
 date
 echo "running qualimap"
 time qualimap bamqc -bam out.bam -outdir $outbbmap"qualimap_all/" -nt $threads -c
-time qualimap bamqc -bam out.bam -outdir $outbbmap"qualimap_gff/" -gff ../genes_chr1_to_chr11.gff3 -nt $threads -c
+time qualimap bamqc -bam out.bam -outdir $outbbmap"qualimap_gff/" -gff $gff -nt $threads -c
 date
 echo "Done mapping with bbmap"
 
 cd $outBWAMEM
 cp ../$ref $ref
 date
-echo "inexing and mapping with BWA MEM"
+echo "indexing and mapping with BWA MEM"
 echo "Creating index with BWA"
 time bwa index $ref
 date
 echo "Mapping with BWA MEM"
 time bwa mem $ref $R1 $R2 -t $threads > out.sam
 date
-echo "inexing and mapping with BWA MEM done"
+echo "indexing and mapping with BWA MEM done"
 echo "converting sams to bams"
 time samtools view -bS -@ $threads out.sam > out.bam
 date
@@ -95,22 +95,22 @@ time samtools index out.bam
 date
 echo "running qualimap"
 time qualimap bamqc -bam out.bam -outdir $outBWAMEM"qualimap_all/" -nt $threads -c
-time qualimap bamqc -bam out.bam -outdir $outBWAMEM"qualimap_gff/" -gff ../genes_chr1_to_chr11.gff3 -nt $threads -c
+time qualimap bamqc -bam out.bam -outdir $outBWAMEM"qualimap_gff/" -gff $gff -nt $threads -c
 date
 echo "Done mapping with BWA MEM"
 
 cd $outstampy
 cp ../$ref $ref
 date
-echo "inexing and mapping with Stampy"
-echo "inexing with Stampy"
+echo "indexing and mapping with Stampy"
+echo "indexing with Stampy"
 time stampy.py -G index $ref
 time stampy.py -g index -H index
 date
 echo "mapping with Stampy"
 time stampy.py -g index -h index -t $threads -M $R1 $R2 > out.sam
 date
-echo "inexing and mapping with Stampy done"
+echo "indexing and mapping with Stampy done"
 echo "converting sams to bams"
 time samtools view -bS -@ $threads out.sam > out.bam
 date
@@ -120,6 +120,6 @@ time samtools index out.bam
 date
 echo "running qualimap"
 time qualimap bamqc -bam out.bam -outdir $outstampy"qualimap_all/" -nt $threads -c
-time qualimap bamqc -bam out.bam -outdir $outstampy"qualimap_gff/" -gff ../genes_chr1_to_chr11.gff3 -nt $threads -c
+time qualimap bamqc -bam out.bam -outdir $outstampy"qualimap_gff/" -gff $gff -nt $threads -c
 date
 echo "Done mapping with stampy"
