@@ -121,10 +121,8 @@ for in1 in $(find $outputtrimreads -name "*R1_001_trimmed.fastq.gz"); do
     qualimap bamqc -bam $outbamngm".bam" -outdir $outbamdirngm -nt $threads
     
 done
-
 echo "Done Mapping"
 date
-
 
 echo "indexing bams"
 date
@@ -135,11 +133,12 @@ date
 echo "running indexcov"
 date
 goleft indexcov --directory $indexcov --sex "" ${ngmout}"*.bam"
-
 echo "done running indexcov"
 date
 
 echo "running multiqc"
 date
 multiqc $outputbase -o $outputbase
+date
+echo "done running multiqc"
 date
