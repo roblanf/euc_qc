@@ -7,6 +7,7 @@
 inputf="/disks/dacelo/data/raw_data/Project_SN7001117R_0083_CKulheim_LBronham_Melaleuca/"
 outputbase="/disks/dacelo/data/QC/test/"
 ref="/disks/dacelo/data/raw_data/active_refs/Emel.fa.gz" # reference file as a fasta
+gff="/disks/dacelo/data/raw_data/active_refs/Egrandis_genes_chr1_to_chr11.gff3"
 adaptors="/disks/dacelo/data/programs/bbmap/resources/adapters.fa"
 
 # for more control of the parameters, you can change them in the commandlines below
@@ -71,8 +72,8 @@ date
 # run fastqc on all the raw and trimmed data files
 echo "Running fastqc"
 date
-find $inputf -name '*.fastq.gz' | xargs fastqc  -o $outputrawqc -t $threads
-find $outputtrimreads -name '*.fastq.gz' | xargs fastqc  -o $outputtrimqc -t $threads
+#find $inputf -name '*.fastq.gz' | xargs fastqc  -o $outputrawqc -t $threads
+#find $outputtrimreads -name '*.fastq.gz' | xargs fastqc  -o $outputtrimqc -t $threads
 
 echo "Done running fastqc"
 date
@@ -117,9 +118,11 @@ for in1 in $(find $outputtrimreads -name "*R1_001_trimmed.fastq.gz"); do
     rm $in2
     
     echo "running qualimap on sorted bams"
-    outbamdirngm=$ngmout$id"trimmed_qm"
-    qualimap bamqc -bam $outbamngm".bam" -outdir $outbamdirngm -nt $threads
-    
+    outqualimap_all=$ngmout$id"qualimap_all/"
+    qualimap bamqc -bam $outbamngm".bam" -outdir $outqualimap_all -nt $threads -c
+    outqualimap_gff=$ngmout$id"qualimap_gff/"
+	qualimap bamqc -bam $outbamngm".bam" -outdir $outqualimap_gff -gff $gff -nt $threads -c
+
 done
 echo "Done Mapping"
 date
