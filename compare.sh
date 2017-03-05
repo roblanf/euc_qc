@@ -35,7 +35,7 @@ mkdir $outstampy
 
 
 cd $outngm
-cp ../Ephy.fa.gz $ref
+cp ../$ref $ref
 date
 echo "inexing and mapping with ngm"
 time ngm -t $threads -p -r $ref -1 $R1 -2 $R2 -o out.sam 
@@ -55,7 +55,7 @@ echo "Done mapping with ngm"
 
 
 cd $outbbmap
-cp ../Ephy.fa.gz $ref
+cp ../$ref $ref
 date
 echo "Mapping with bbmap"
 time bbmap.sh in1=$R1 in2=$R2 ref=$ref out=out.sam path=$outbbmap t=$threads
@@ -74,7 +74,7 @@ date
 echo "Done mapping with bbmap"
 
 cd $outBWAMEM
-cp ../Ephy.fa.gz $ref
+cp ../$ref $ref
 date
 echo "Creating index with BWA"
 time bwa index $ref
@@ -96,7 +96,7 @@ date
 echo "Done mapping with BWA MEM"
 
 cd $outstampy
-cp ../Ephy.fa.gz $ref
+cp ../$ref $ref
 date
 echo "inexing with Stampy"
 time stampy.py -G index $ref
