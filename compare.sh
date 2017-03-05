@@ -40,6 +40,7 @@ date
 echo "inexing and mapping with ngm"
 time ngm -t $threads -p -r $ref -1 $R1 -2 $R2 -o out.sam 
 date
+echo "inexing and mapping with ngm done"
 echo "converting sams to bams"
 time samtools view -bS -@ $threads out.sam > out.bam
 date
@@ -57,9 +58,10 @@ echo "Done mapping with ngm"
 cd $outbbmap
 cp ../$ref $ref
 date
-echo "Mapping with bbmap"
+echo "indexing and mapping with bbmap"
 time bbmap.sh in1=$R1 in2=$R2 ref=$ref out=out.sam path=$outbbmap t=$threads
 date
+echo "indexing and mapping with bbmap done"
 echo "converting sams to bams"
 time samtools view -bS -@ $threads out.sam > out.bam
 date
@@ -76,12 +78,14 @@ echo "Done mapping with bbmap"
 cd $outBWAMEM
 cp ../$ref $ref
 date
+echo "inexing and mapping with BWA MEM"
 echo "Creating index with BWA"
 time bwa index $ref
 date
 echo "Mapping with BWA MEM"
 time bwa mem $ref $R1 $R2 -t $threads > out.sam
 date
+echo "inexing and mapping with BWA MEM done"
 echo "converting sams to bams"
 time samtools view -bS -@ $threads out.sam > out.bam
 date
@@ -98,6 +102,7 @@ echo "Done mapping with BWA MEM"
 cd $outstampy
 cp ../$ref $ref
 date
+echo "inexing and mapping with Stampy"
 echo "inexing with Stampy"
 time stampy.py -G index $ref
 time stampy.py -g index -H index
@@ -105,6 +110,7 @@ date
 echo "mapping with Stampy"
 time stampy.py -g index -h index -t $threads -M $R1 $R2 > out.sam
 date
+echo "inexing and mapping with Stampy done"
 echo "converting sams to bams"
 time samtools view -bS -@ $threads out.sam > out.bam
 date
