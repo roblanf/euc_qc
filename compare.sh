@@ -14,7 +14,7 @@ R2="/disks/dacelo/data/raw_data/Project_SN7001117R_0083_CKulheim_LBronham_Melale
 outputbase="/disks/dacelo/data/compare_mappers/"
 
 # reference genome
-ref="Ephy.fa.gz" # reference file as a fasta
+ref="Emel.fa.gz" # reference file as a fasta
 
 # gff file defining subset of reference genome - qualimap will run on both the whole genome and on this subset
 # sensible to define a subset that you might use for your final analyses
