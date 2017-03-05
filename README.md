@@ -61,7 +61,11 @@ I just run it like this:
 
 ```sh compare.sh &> log.txt```
 
-You can extract the time each analysis took from the frequent date stamps. I just do this by hand - it's only 4 mappers. 
+To extract the time it took each mapper to do the indexing and mapping, you can just use grep like this:
+
+```grep -B 1 "and mapping" log.txt```
+
+then compare the start and end times for each piece of software. Two of the mappers do the indexing and mapping in one hit, so you can't necessarily tell how long each part took. The other two do them separately, and if you dig into the output, you can see how long the indexing took vs. the mapping. 
 
 ### Output
 
