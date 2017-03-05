@@ -91,7 +91,7 @@ Performs the basic QC on the reads, in the following steps:
 
 1. Uses *bbduk* for adaptor then quality trimming of each set of reads
 2. Uses *fastqc* to make some basic measurements of the raw and trimmed reads
-3. Uses *bbmap* to map the trimmed reads to the E. grandis genome
+3. Uses *ngm* to map the trimmed reads to the E. grandis genome
 4. Uses *samtools* to turn the SAM files to sorted BAM files
 5. Deletes all the large files (the SAMs and the trimmed read files)*
 6. Uses *samtools* and GNU parallel to index all the bams
@@ -100,15 +100,11 @@ Performs the basic QC on the reads, in the following steps:
 
 *It would be easy not to delete these files of course, but since the only point of this script is to run QC, we usually don't want to keep the trimmed reads. We can always re-trim the files for the final analysis if we like the settings we used.
 
-Why am I using bbduk? I don't know. It would be better to just use whatever the best mapper you identified from ```compare.sh``` I just haven't got round to updating the script yet. For me the best mapper for this is clearly NextGenMap - it's very accurate and very fast. 
-
 ### Settings
 
 * **inputf**: the input file where all your reads are (they can be in subfolders)
 * **outputbase**: the output file where you want all the processed data, QC reports, and summary stats to go. Output will be stored in subfolders of this
-* **bbduk**: the location of the bbduk.sh script (from when you installed bbtools)
-* **bbmap**: the location of the bbmap.sh script (from when you installed bbtools)
-* **qualimap**: the location of the qualimap executable
+* **ref**: The reference genome in .fa.gz format.
 * **adaptors**: the adaptor file you want to use with bbduk (we usually just use the adapters.fa file, which contains most commonly used adaptors.
 * **threads**: maximum number of threads to use
 * **minlen**: minimum length of read to keep after quality and adaptor trimming
@@ -116,7 +112,7 @@ Why am I using bbduk? I don't know. It would be better to just use whatever the 
 
 ### Output
 
-* ```/bbmap``` sorted BAMs and various summary outputs from mapping with bbmap
+* ```/ngm``` sorted BAMs and various summary outputs from mapping with bbmap
 * ```/rawqc``` fastqc results on the raw sequencing reads
 * ```/trimmedqc``` fastqc results on the trimmed sequencing reads
 * ```/trimmed_reads``` trimming stats from bbduk (lots of text files)
