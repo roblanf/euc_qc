@@ -20,10 +20,12 @@ declare -a s=("0.1" "0.2" "0.3" "0.4" "0.5" "0.6" "0.7" "0.8" "0.9")
 ## now loop through the above array to try out all of the s values you want
 for i in "${s[@]}"
 do
-	echo "running ngm with s set to $i"
 	outbam="out_"$i.bam
-	
-	ngm -s $i -t $threads -p -r $ref -1 $R1 -2 $R2 -o "out_"$i.sam 
+	date
+	echo "running ngm with s set to $i"
+	time ngm -s $i -t $threads -p -r $ref -1 $R1 -2 $R2 -o "out_"$i.sam 
+	date
+	echo "done running ngm with s set to $i"
 	samtools view -bS -@ $threads "out_"$i.sam > $outbam
 	samtools sort -@ $threads $outbam -o $outbam
 	samtools index $outbam
