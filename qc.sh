@@ -1,4 +1,4 @@
-# Basic quality control for Eucalyptus illumina data
+# Basic quality control for mapping PE illumina data to a distant reference
 
 # Rob Lanfear, December 2016
 
@@ -110,7 +110,7 @@ for in1 in $(find $outputtrimreads -name "*R1_001_trimmed.fastq.gz"); do
     samtools view -bS -@ $threads $outsamngm > $outbamngm".bam"
 
     echo "sorting bam"
-    samtools sort -@ $threads  $outbamngm".bam" $outbamngm
+    samtools sort -@ $threads  $outbamngm".bam" -o $outbamngm".bam"
 
     echo "deleting sams and trimmed reads"
     rm $outsamngm

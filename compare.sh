@@ -45,7 +45,7 @@ echo "converting sams to bams"
 time samtools view -bS -@ $threads out.sam > out.bam
 date
 echo "sorting and indexing bams"
-time samtools sort -@ $threads  out.bam out
+time samtools sort -@ $threads out.bam -o out.bam
 time samtools index out.bam
 date
 echo "running qualimap"
@@ -66,7 +66,7 @@ echo "converting sams to bams"
 time samtools view -bS -@ $threads out.sam > out.bam
 date
 echo "sorting and indexing bams"
-time samtools sort -@ $threads  out.bam out
+time samtools sort -@ $threads out.bam -o out.bam
 time samtools index out.bam
 date
 echo "running qualimap"
@@ -90,7 +90,7 @@ echo "converting sams to bams"
 time samtools view -bS -@ $threads out.sam > out.bam
 date
 echo "sorting and indexing bams"
-time samtools sort -@ $threads  out.bam out
+time samtools sort -@ $threads out.bam -o out.bam
 time samtools index out.bam
 date
 echo "running qualimap"
@@ -115,7 +115,7 @@ echo "converting sams to bams"
 time samtools view -bS -@ $threads out.sam > out.bam
 date
 echo "sorting and indexing bams"
-time samtools sort -@ $threads  out.bam out
+time samtools sort -@ $threads out.bam -o out.bam
 time samtools index out.bam
 date
 echo "running qualimap"
