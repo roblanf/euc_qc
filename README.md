@@ -41,11 +41,11 @@ A disclaimer is that this code is neither particularly optimal nor particularly 
 
 Also note that there are no commandline arguments. That's by design. Without commandline arguments, the script itself is a perfect record of what we did. This helps becuase when I get new data, I drop a copy of this script into the folder with the fastq files, then run that version of the script. Then, in a year when I can't remember exactly what I did for the QC, it's all there in the script. 
 
-## compare.sh
+## compare_mappers.sh
 
 ### What it does
 
-Compares a few common pieces of mapping software, by mapping a single sample of reads (you could easily subset your reads if mapping one sample takes too long). All we do is map a single sample to the reference with all the mappers, then use FastQC to look at how it went on the whole genome, and on the subset we're interested in (the genes, for us).
+Compares a few common pieces of mapping software, by mapping a single sample of reads (you could easily subset your reads if mapping one sample takes too long). All we do is map a single sample to the reference with all the mappers, then use FastQC to look at how it went on the whole genome, and on the subset we're interested in (the genes, for us). By piping the output to a log file, we can extract how long each mapper took too, as well as its computational efficiency (how well it used all the threads you gave it).
 
 ### Settings
 
@@ -76,6 +76,8 @@ A folder for each aligner (e.g. ```/ngm```), which contains:
 3. ```/qualimap_all``` qualimap results from looking at the whole .bam file
 4. ```/qualimap_gff``` qualimap results from looking at the subset of the .bam file specified by the input .gff file
 
+A log.txt file (if you piped the output as above), from which you can extract timings using grep. You can also extract timings from the shell ```time``` command, which additionally gives you computational efficiency of the mapper (this is probably only of interest to developers, because it tells them how much potential there is to speed up their software by using the threads more effectively).
+
 ### What to look at
 
 Compare the qualimap results for all of the aligners. Beware that the mapping qualities are not comparable - each aligner calculates mapping qualities in a different (sometimes very different) way. Particular things to pay attention to are
@@ -86,6 +88,7 @@ Compare the qualimap results for all of the aligners. Beware that the mapping qu
 4. Which mapper maps the most reads? 
 5. How's the coverage across the chromosomes? 
 6. How's the insert size across the chromosomes?
+7. And of course, the central question: which mapper is quickest on your data?
 
 ## qc.sh
 
@@ -130,3 +133,19 @@ Performs the basic QC on the reads, in the following steps:
 2. Examine the stats from bbduk in ```/trimmed_reads```. This will tell you useful information about adaptors and quality trimming.
 3. Examine the fastqc.html files in ```/rawqc``` and ```/trimmedqc```
 4. Look at the indexcov HTML report for any issues, particularly for differences between samples that might indicate problems with extraction / sequencing. 
+
+
+## optimise_nextgenmap.sh
+
+### What it does
+
+This is a simple bash script that runs NextGenMap a bunch of times, changing the main parameter the authors of NextGenMap suggest one might investigate: the sensitivity. As above, the output will contain information on timing (in the log.txt file if you pipe it to a log.txt file), and you can look at qualimap results from the whole genome and a subset specified in a gff file.
+
+Settings and output are largely as above. 
+
+To run the script you need to use bash, i.e.
+
+```bash optimise_nextgenmap.sh &> log.txt```
+
+this is because the script uses arrays, which are available in bash and not in shell.
+
