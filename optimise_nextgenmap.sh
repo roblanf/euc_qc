@@ -13,7 +13,8 @@ outputbase="/disks/dacelo/data/QC/Project_SN7001117R_0083_CKulheim_LBronham_Mela
 # reference genome
 ref="/disks/dacelo/data/raw_data/active_refs/Emel.fa.gz"
 gff="/disks/dacelo/data/raw_data/active_refs/Egrandis_genes_chr1_to_chr11.gff3"
-threads=30
+
+threads=20
 
 declare -a s=("0.1" "0.2" "0.3" "0.4" "0.5" "0.6" "0.7" "0.8" "0.9")
 
