@@ -21,6 +21,18 @@ for in1 in $(find $inputf -name "*R1_001.fastq.gz"); do
 
 done
 
+
+cat Sample_M1* > M1.fastq.gz
+cat Sample_M2* > M2.fastq.gz
+cat Sample_M3* > M3.fastq.gz
+cat Sample_M4* > M4.fastq.gz
+cat Sample_M5* > M5.fastq.gz
+cat Sample_M6* > M6.fastq.gz
+cat Sample_M7* > M7.fastq.gz
+cat Sample_M8* > M8.fastq.gz
+
+rm Sample*
+
 # make the mash sketches
 gzs=$(find *.fastq.gz)
 mash sketch -p $threads -m $m -k $kmer_size -s $s $gzs
@@ -35,4 +47,4 @@ mash info raw.msh
 # calculate all pairwise distances
 mash dist raw.msh raw.msh > distances.tab
 
-Rscript --vanilla heatmap.r $inputf $outputf"heatmap.pdf"
+Rscript --vanilla heatmap.r $outputf"distances.tab" $outputf"heatmap.pdf"

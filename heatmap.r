@@ -12,7 +12,7 @@ names(d) = c("sample1", "sample2", "distance")
 
 dst = acast(d, sample1 ~ sample2)
 dst = data.matrix(dst)
-dim = ncol(dist)
+dim = ncol(dst)
 
 samples = rownames(dst)
 splits = strsplit(samples, "_")
