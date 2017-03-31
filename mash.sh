@@ -5,9 +5,9 @@ outputf="/disks/dacelo/data/QC/Project_SN7001117R_0083_CKulheim_LBronham_Melaleu
 mkdir $outputf
 
 threads=5 # number of threads to use
-kmer_size=16 # kmer size to use for minhash sketches
+kmer_size=32 # kmer size to use for minhash sketches
 m=2 # Minimum copies of each k-mer required to pass noise filter for reads
-s=10000 #Sketch size. Each sketch will have at most this many non-redundant min-hashes
+s=1000000 #Sketch size. Each sketch will have at most this many non-redundant min-hashes. Bigger is better but slower.
 
 cd $outputf
 
@@ -20,18 +20,6 @@ for in1 in $(find $inputf -name "*R1_001.fastq.gz"); do
     cat $in1 $in2 > $readf
 
 done
-
-
-cat Sample_M1* > M1.fastq.gz
-cat Sample_M2* > M2.fastq.gz
-cat Sample_M3* > M3.fastq.gz
-cat Sample_M4* > M4.fastq.gz
-cat Sample_M5* > M5.fastq.gz
-cat Sample_M6* > M6.fastq.gz
-cat Sample_M7* > M7.fastq.gz
-cat Sample_M8* > M8.fastq.gz
-
-rm Sample*
 
 # make the mash sketches
 gzs=$(find *.fastq.gz)
