@@ -6,7 +6,7 @@ mkdir $outputf
 
 threads=5 # number of threads to use
 kmer_size=32 # kmer size to use for minhash sketches
-m=2 # Minimum copies of each k-mer required to pass noise filter for reads
+m=5 # Minimum copies of each k-mer required to pass noise filter for reads. You can estimate this by running genomescope first...
 s=1000000 #Sketch size. Each sketch will have at most this many non-redundant min-hashes. Bigger is better but slower.
 
 cd $outputf
