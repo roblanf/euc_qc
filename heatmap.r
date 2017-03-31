@@ -12,6 +12,7 @@ names(d) = c("sample1", "sample2", "distance")
 
 dst = acast(d, sample1 ~ sample2)
 dst = data.matrix(dst)
+diag(dst) = NA # set diagonals to NA to avoid colour washout, HT: https://twitter.com/BEDecato/status/847646772453285890
 dim = ncol(dst)
 
 samples = rownames(dst)
