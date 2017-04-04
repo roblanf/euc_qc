@@ -5,7 +5,7 @@ threads=20 # how many threads do you want to use?
 s='100M' 
 kmer_size=21 # 21 suggested in the docs - longer gives issues with seq. error
 read_length=100 # length of reads in your input fastq files
-kmer_max=1000 # ignore kmers represented more the kmer_max times (avoids issues with e.g. cpDNA)
+kmer_max=5000 # ignore kmers represented more the kmer_max times (avoids issues with e.g. cpDNA)
 
 mkdir $outputf
 cd $outputf
@@ -36,6 +36,7 @@ cat *.fastq.gz > all.fastq.gz
 
 for readf in $(find *.fastq.gz); do
 
+	# count kmers in jellyfish, then make a histogram. NB: use zcat because jellyfish needs raw fastq, not .gz
 	zcat $readf | jellyfish count -C -m $kmer_size -s $s -t $threads -o $outputf$readf'.jf' /dev/fd/0
 	jellyfish histo -t $threads $outputf$readf'.jf' > $readf'.histo'
 
@@ -45,5 +46,6 @@ for readf in $(find *.fastq.gz); do
 
 done
 
+# clean up big files
 rm *.fastq.gz
 rm *.jf
