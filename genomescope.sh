@@ -10,6 +10,7 @@ kmer_max=5000 # ignore kmers represented more the kmer_max times (avoids issues 
 mkdir $outputf
 cd $outputf
 
+# first we join fwd and reverse reads into single .fastq.gz files
 for in1 in $(find $inputf -name "*R1_001.fastq.gz"); do
     in2=${in1%%R1_001.fastq.gz}"R2_001.fastq.gz"
 
@@ -20,6 +21,8 @@ for in1 in $(find $inputf -name "*R1_001.fastq.gz"); do
 
 done
 
+# here we join biological replicates into files, we need this to get sufficient coverage
+# to run genomescope
 cat Sample_M1* > M1.fastq.gz
 cat Sample_M2* > M2.fastq.gz
 cat Sample_M3* > M3.fastq.gz
