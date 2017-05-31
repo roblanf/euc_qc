@@ -1,0 +1,21 @@
+#!/bin/bash
+#PBS -P xf1
+#PBS -q express
+#PBS -l walltime=01:00:00
+#PBS -l mem=32GB
+#PBS -l ncpus=16
+#PBS -l wd
+#PBS -N mash_dist
+
+module load mash
+
+MASHDIR=/short/xf1/Epauc/QC/mash
+
+# merge all the individual mash (.msh) sketch files into one
+mash paste ${MASHDIR}/raw $(ls ${MASHDIR}/*.msh)
+
+# sanity check: show contents of merged mash file
+mash info ${MASHDIR}/raw.msh
+
+# calculate pairwise distances of each sample in the merge sketches
+mash dist -p ${PBS_NCPUS} ${MASHDIR}/raw.msh ${MASHDIR}/raw.msh > ${MASHDIR}/distances.tab
