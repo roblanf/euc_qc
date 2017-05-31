@@ -1,10 +1,16 @@
 #!/usr/bin/env Rscript
+#### plot distance matrix using Pretty Heatmap (pheatmap) ####
+
+#inputf = "c:/devwork/NGS/Epauc/QC/mash/distances.tab"
+#outputf = "c:/devwork/NGS/Epauc/QC/mash/heatmap.pdf"
+
 args = commandArgs(trailingOnly=TRUE)
 
 inputf = args[1]
 outputf = args[2]
 
 library(reshape2)
+library(pheatmap)
 
 d = read.delim(inputf, header=F)
 d = d[,c(1,2,3)]
@@ -24,10 +30,5 @@ rownames(dst) = samples
 colnames(dst) = samples
 
 pdf(file=outputf)
-
-image(1:dim, 1:dim, dst, axes = FALSE, xlab="", ylab="")
-axis(1, 1:dim, rownames(dst), cex.axis = 0.5, las=3)
-axis(2, 1:dim, rownames(dst), cex.axis = 0.5, las=1)
-text(expand.grid(1:dim, 1:dim), sprintf("%.3f", dst), cex=0.4)
-
+pheatmap(dst, cluster_rows = F, cluster_cols = F, display_numbers = T, fontsize_number = 6, number_format = "%.3f")
 dev.off()
