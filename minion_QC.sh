@@ -10,12 +10,12 @@ gff="/data/active_refs/Egrandis_genes_chr1_to_chr11.gff3"
 threads=55 # number of threads to use
 mem_size='50G' # memory size for Qualimap
 flowcellID="FLO-MIN107"
-kidID="SQK-LSK108"
+kitID="SQK-LSK108"
 
 mkdir $outputbase
 
 # basecall with albacore
-read_fast5_basecaller.py -i $inputf -t $threads -s $outputbase -f FLO-MIN107 -k SQK-RAD002 -r -o fastq
+read_fast5_basecaller.py -i $inputf -t $threads -s $outputbase -f $flowcellID -k $kitID -r -o fastq
 
 # cat together the fastq's to one big fastq
 fastq_file=$outputbase"reads.fastq"
