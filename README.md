@@ -90,6 +90,10 @@ Compare the qualimap results for all of the aligners. Beware that the mapping qu
 6. How's the insert size across the chromosomes?
 7. And of course, the central question: which mapper is quickest on your data?
 
+## minion_QC.sh
+Does a bunch of QC on our minion data, including mapping etc. 
+
+
 ## qc.sh
 
 ### What it does
