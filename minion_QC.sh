@@ -59,3 +59,16 @@ samtools view -h $outbam |     awk -F'\t' '{if((/^@/) || (length($10)>10000)){pr
 samtools view -h $outbam |     awk -F'\t' '{if((/^@/) || (length($10)>20000)){print $0}}' | samtools stats   | grep '^SN' | cut -f 2- > stats_20k.txt
 samtools view -h $outbam |     awk -F'\t' '{if((/^@/) || (length($10)>100000)){print $0}}' | samtools stats  | grep '^SN' | cut -f 2- > stats_100k.txt
 samtools view -h $outbam |     awk -F'\t' '{if((/^@/) || (length($10)>200000)){print $0}}' | samtools stats  | grep '^SN' | cut -f 2- > stats_200k.txt 
+
+echo "Assembling with minimap & miniasm"
+miniasmout=$outputbase"miniasm/"
+mkdir $miniasmout
+paf=$miniasmout"reads.paf.gz"
+minimap -Sw5 -L100 -m0 -t 35 $fastq_file $fastq_file | gzip -1 > $paf
+miniasm -f $fastq_file $paf > $miniasmout"miniasm.gfa"
+awk '$1=="S" {print ">"$2"\n"$3} ' $miniasmout"miniasm.gfa" > $miniasmout"miniasm.fa"
+
+echo "Assessing assembly with quast"
+quastout=$outputbase"quast/"
+mkdir $quastout
+python quast.py  -t $threads -o $quastout --gene-finding --eukaryote -R $ref -G $gff $miniasmout"miniasm.fa"
