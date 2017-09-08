@@ -3,19 +3,22 @@
 # Rob Lanfear and Miriam Schalamun
 
 # A few things to set before you go
-inputf="/data/nanopore/RB7_A2/20170609_0424_Epauciflora_A2/"
-outputbase="/data/nanopore/RB7_A2/"
+inputf="/data/nanopore/nanopore/RB7_A2/"
+outputbase=$inputf
 ref="/data/active_refs/Epau.fa.gz" # reference file as a fasta
 gff="/data/active_refs/Egrandis_genes_chr1_to_chr11.gff3"
-threads=55 # number of threads to use
+threads=25 # number of threads to use
 mem_size='50G' # memory size for Qualimap
 flowcellID="FLO-MIN107"
 kitID="SQK-LSK108"
 
 mkdir $outputbase
 
-# basecall with albacore
-read_fast5_basecaller.py -i $inputf -t $threads -s $outputbase -f $flowcellID -k $kitID -r -o fastq
+# basecall with albacore 
+# the --disable-filtering is new for albacore 2.x, and means that we keep all the reads in one folder
+# this allows us to look at all the data more easily, and determine our own cutoff flowcell-by-flowcell
+# -q 0 puts all the reads into a single fastq file
+read_fast5_basecaller.py -i $inputf -t $threads -s $outputbase -f $flowcellID -k $kitID -r -o fastq -q 0 --disable_filtering
 
 # cat together the fastq's to one big fastq
 fastq_file=$outputbase"reads.fastq"
@@ -42,14 +45,6 @@ samtools index out.bam
 rm out.sam
 qualimap bamqc -bam out.bam -outdir $outputbase"qualimap_all/" -nt $threads -c --java-mem-size=$mem_size
 qualimap bamqc -bam out.bam -outdir $outputbase"qualimap_gff/" -gff $gff -nt $threads -c --java-mem-size=$mem_size
-
-
-# run nanoplot
-echo "Running nanoplot"
-outnano=$outputbase"nanoplot/"
-mkdir $outnano
-NanoPlot --fastq_rich $fastq_file --outdir $outnano --threads $threads --loglength
-NanoPlot --bam out.bam --outdir $outnano --threads $threads --loglength --prefix bam
 
 # stats on reads > various length (thanks to @gringer here: https://bioinformatics.stackexchange.com/questions/678/get-the-mapping-statistics-of-a-single-read-from-a-bam-file/696#696)
 outbam=$outngmlr"out.bam"
